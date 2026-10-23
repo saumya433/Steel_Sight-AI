@@ -1,4 +1,474 @@
-try {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f4f7fa">
+<title>SteelSight AI | Industrial Vision Intelligence</title>
+<style>
+:root{
+  --navy:#173d65;
+  --blue:#3978ad;
+  --ink:#183650;
+  --muted:#73889b;
+  --bg:#f4f7fa;
+  --silver:#eaf0f5;
+  --border:#dce5ed;
+  --white:#fff;
+  --green:#177c66;
+  --red:#b53e49;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,
+  "Segoe UI",sans-serif;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+.shell{min-height:100vh}
+header{
+  height:78px;
+  background:white;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 5%;
+  gap:15px;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{
+  width:44px;height:44px;
+  background:var(--navy);
+  color:white;border-radius:11px;
+  display:grid;place-items:center;
+  font-size:22px;font-weight:800;
+}
+.brand-name{font-size:19px;font-weight:800;letter-spacing:-.6px}
+.brand-name span{color:var(--blue)}
+.brand-sub{font-size:9px;letter-spacing:1.4px;color:var(--muted);margin-top:4px}
+.header-right{display:flex;align-items:center;gap:14px}
+.connection{font-size:11px;color:var(--muted)}
+.connection.online{color:var(--green)}
+.connection.offline{color:var(--red)}
+main{max-width:1460px;margin:auto;padding:36px 25px 65px}
+.eyebrow{color:var(--blue);font-size:10px;letter-spacing:1.8px;font-weight:800}
+.hero{display:flex;justify-content:space-between;align-items:flex-end;gap:15px}
+h1{font-size:clamp(28px,4vw,42px);letter-spacing:-1.4px;margin:12px 0}
+.subtitle{color:var(--muted);font-size:13px;line-height:1.7;max-width:700px}
+.tag{
+  background:#e6f0f8;color:var(--blue);
+  border-radius:25px;padding:9px 13px;
+  font-size:10px;font-weight:700;
+}
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:15px;margin:30px 0;
+}
+.metric,.panel{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:15px;
+  box-shadow:0 5px 22px rgba(28,64,92,.035);
+}
+.metric{padding:20px}
+.metric-label{font-size:11px;color:var(--muted)}
+.metric-value{font-size:25px;font-weight:800;margin:11px 0 6px}
+.metric-note{font-size:10px;color:var(--muted)}
+.panel-head{
+  padding:19px 22px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.panel-title{font-size:15px;font-weight:750}
+.panel-sub{font-size:11px;color:var(--muted);margin-top:5px}
+.workspace{padding:22px}
+.viewers{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:17px;
+}
+.viewer-card{
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;background:white;
+}
+.viewer-label{
+  padding:13px 15px;
+  font-size:11px;font-weight:750;
+  display:flex;justify-content:space-between;gap:8px;
+}
+.viewer-label span:last-child{color:var(--muted);font-weight:500}
+.image-stage{
+  height:370px;
+  background:#edf2f6;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.image-stage img{
+  max-width:100%;max-height:100%;
+  object-fit:contain;
+}
+.placeholder{text-align:center;padding:25px;color:#8195a6}
+.placeholder-icon{font-size:37px;margin-bottom:12px}
+.placeholder strong{display:block;font-size:12px;color:#526c80}
+.placeholder p{font-size:11px;line-height:1.6}
+.toolbar{
+  margin-top:20px;
+  display:flex;align-items:center;gap:11px;flex-wrap:wrap;
+}
+.btn{
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:white;color:var(--ink);
+  padding:13px 18px;font-size:12px;font-weight:750;
+}
+.btn.primary{background:var(--navy);color:white;border-color:var(--navy)}
+.btn:hover:not(:disabled){filter:brightness(.96)}
+.upload-label{display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.file-input{display:none}
+.note{font-size:11px;color:var(--muted);line-height:1.6;margin-top:14px}
+.message{
+  margin-top:15px;padding:13px;
+  border-radius:9px;background:#edf2f6;
+  color:#526c80;font-size:11px;line-height:1.6;
+  overflow-wrap:anywhere;
+}
+.message.success{background:#e5f5f0;color:var(--green)}
+.message.error{background:#fff0f1;color:var(--red)}
+.lower{
+  display:grid;
+  grid-template-columns:1.5fr 1fr;
+  gap:18px;margin-top:20px;
+}
+.report{padding:22px}
+.report-count{font-size:30px;font-weight:800}
+.report-label{font-size:11px;color:var(--muted);margin-top:5px}
+table{width:100%;border-collapse:collapse;margin-top:18px;font-size:12px}
+th{text-align:left;color:var(--muted);font-size:10px;padding:12px 6px;border-bottom:1px solid var(--border)}
+td{padding:13px 6px;border-bottom:1px solid #edf1f4;overflow-wrap:anywhere}
+.empty-report{color:var(--muted);font-size:12px;line-height:1.7;margin-top:20px}
+.settings{padding:22px}
+.settings label{display:block;font-size:11px;font-weight:750;margin-bottom:9px}
+.settings input{
+  width:100%;padding:13px;border:1px solid var(--border);
+  border-radius:9px;color:var(--ink);
+  font-size:12px;
+}
+.settings p{color:var(--muted);font-size:11px;line-height:1.7}
+.settings .btn{margin-top:9px}
+footer{
+  border-top:1px solid var(--border);
+  background:white;
+  padding:24px 5%;
+  font-size:11px;color:var(--muted);
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+@media(max-width:950px){
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .lower{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  header{height:68px;padding:0 16px}
+  .brand-name{font-size:16px}
+  .brand-sub{font-size:8px}
+  main{padding:25px 13px 45px}
+  .hero{display:block}
+  .viewers{grid-template-columns:1fr}
+  .image-stage{height:280px}
+  .workspace{padding:13px}
+  .panel-head{padding:15px}
+  .metric{padding:15px}
+  .metric-value{font-size:21px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<header>
+  <div class="brand">
+    <div class="brand-mark">S</div>
+    <div>
+      <div class="brand-name">SteelSight <span>AI</span></div>
+      <div class="brand-sub">INDUSTRIAL VISION INTELLIGENCE</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="connection" id="connection">Backend not connected</div>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div>
+      <div class="eyebrow">QUALITY ASSURANCE / COMPUTER VISION</div>
+      <h1>Precision surface inspection.</h1>
+      <p class="subtitle">
+        A modern AI-assisted inspection workspace for steel surface
+        defect detection, visual analysis and quality-control support.
+      </p>
+    </div>
+    <div class="tag">INSPECTION STUDIO</div>
+  </div>
+
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-label">AI detection engine</div>
+      <div class="metric-value">YOLOv8</div>
+      <div class="metric-note">Existing trained model</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Defect categories</div>
+      <div class="metric-value">06</div>
+      <div class="metric-note">NEU-DET classes</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Validation mAP@50</div>
+      <div class="metric-value">73.3%</div>
+      <div class="metric-note">Previously reported benchmark</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Inspection status</div>
+      <div class="metric-value" id="inspectionStatus">Ready</div>
+      <div class="metric-note">Waiting for image input</div>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">AI Inspection Workspace</div>
+        <div class="panel-sub">Compare the original surface image with AI detection output.</div>
+      </div>
+      <div class="tag">IMAGE ANALYSIS</div>
+    </div>
+
+    <div class="workspace">
+      <div class="viewers">
+        <div class="viewer-card">
+          <div class="viewer-label">
+            <span>01 / Original image</span>
+            <span id="fileLabel">No image</span>
+          </div>
+          <div class="image-stage" id="originalStage">
+            <div class="placeholder" id="originalEmpty">
+              <div class="placeholder-icon">▧</div>
+              <strong>Upload a steel surface image</strong>
+              <p>JPG, PNG, WEBP or BMP supported</p>
+            </div>
+            <img id="originalImage" alt="Original steel surface" hidden>
+          </div>
+        </div>
+
+        <div class="viewer-card">
+          <div class="viewer-label">
+            <span>02 / AI detection result</span>
+            <span id="resultLabel">Awaiting analysis</span>
+          </div>
+          <div class="image-stage">
+            <div class="placeholder" id="resultEmpty">
+              <div class="placeholder-icon">⌕</div>
+              <strong>No prediction yet</strong>
+              <p>Annotated detection results will appear here after successful API inference.</p>
+            </div>
+            <img id="resultImage" alt="Annotated detection output" hidden>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <input id="fileInput" class="file-input" type="file"
+          accept="image/jpeg,image/png,image/webp,image/bmp">
+        <label for="fileInput" class="btn upload-label">Choose image</label>
+        <button class="btn primary" id="runBtn" disabled>Run AI inspection →</button>
+        <button class="btn" id="clearBtn">Clear</button>
+      </div>
+
+      <div class="note">
+        For meaningful results, upload a close-up steel surface image similar to the model's training data.
+        Predictions are not certified industrial quality verdicts.
+      </div>
+      <div class="message" id="message" role="status">
+        Choose an image to preview it. Real AI predictions require the deployed backend.
+      </div>
+    </div>
+  </section>
+
+  <div class="lower">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Defect Detection Report</div>
+          <div class="panel-sub">Classifications and confidence scores from the prediction API</div>
+        </div>
+        <div class="tag" id="reportTag">NOT RUN</div>
+      </div>
+      <div class="report">
+        <div class="report-count" id="count">—</div>
+        <div class="report-label">Defects detected by the model</div>
+        <div id="reportArea" class="empty-report">
+          No results available. Run an inspection after connecting your backend.
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Backend Connection</div>
+          <div class="panel-sub">Connect to the SteelSight prediction API</div>
+        </div>
+      </div>
+      <div class="settings">
+        <label for="apiUrl">API base URL</label>
+        <input id="apiUrl" type="url" value="https://steel-sight-ai.onrender.com"
+          placeholder="https://your-backend.example.com">
+        <p>
+          Enter the deployed FastAPI URL without /predict.
+          Your frontend calls /health and /predict.
+          The backend must permit requests from this website.
+        </p>
+        <button class="btn" id="checkBtn">Test connection</button>
+        <p>
+          This field does not deploy the backend or load your model.
+          Do not enter passwords or API secrets here.
+        </p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <span>© SteelSight AI · Intelligent Steel Surface Inspection</span>
+  <span>Research prototype · Validate on real production data before industrial use</span>
+</footer>
+</div>
+
+<script>
+const el = id => document.getElementById(id);
+let selectedFile = null;
+let previewUrl = null;
+let busy = false;
+
+
+// Backend address. Uses whatever is typed in the "API base URL" box, so you can point
+// the page at a different backend without editing code. Falls back to the default below.
+const DEFAULT_API_URL = "https://steel-sight-ai.onrender.com";
+
+function baseUrl() {
+  const typed = (el("apiUrl").value || "").trim();
+  return (typed || DEFAULT_API_URL).replace(/\/+$/, "");   // trim spaces and trailing slashes
+}
+
+function message(text, type="") {
+  el("message").textContent = text;
+  el("message").className = "message" + (type ? " " + type : "");
+}
+function resetResults() {
+  el("resultImage").hidden = true;
+  el("resultImage").removeAttribute("src");
+  el("resultEmpty").hidden = false;
+  el("resultLabel").textContent = "Awaiting analysis";
+  el("count").textContent = "—";
+  el("reportTag").textContent = "NOT RUN";
+  el("reportArea").className = "empty-report";
+  el("reportArea").textContent = "No results available. Run an inspection after connecting your backend.";
+}
+function clearAll() {
+  if (busy) return;
+  selectedFile = null;
+  el("fileInput").value = "";
+  if (previewUrl) URL.revokeObjectURL(previewUrl);
+  previewUrl = null;
+  el("originalImage").hidden = true;
+  el("originalImage").removeAttribute("src");
+  el("originalEmpty").hidden = false;
+  el("fileLabel").textContent = "No image";
+  el("runBtn").disabled = true;
+  el("inspectionStatus").textContent = "Ready";
+  resetResults();
+  message("Choose an image to preview it. Real AI predictions require the deployed backend.");
+}
+el("fileInput").addEventListener("change", () => {
+  if (busy) return;
+  const file = el("fileInput").files[0];
+  if (!file) return;
+
+  if (!["image/jpeg","image/png","image/webp","image/bmp"].includes(file.type)) {
+    clearAll();
+    message("Unsupported image format.", "error");
+    return;
+  }
+  if (file.size > 12 * 1024 * 1024) {
+    clearAll();
+    message("Image exceeds the 12 MB frontend limit.", "error");
+    return;
+  }
+
+  selectedFile = file;
+  if (previewUrl) URL.revokeObjectURL(previewUrl);
+  previewUrl = URL.createObjectURL(file);
+  el("originalImage").src = previewUrl;
+  el("originalImage").hidden = false;
+  el("originalEmpty").hidden = true;
+  el("fileLabel").textContent = file.name;
+  el("runBtn").disabled = false;
+  el("inspectionStatus").textContent = "Loaded";
+  resetResults();
+  message("Image loaded. Run AI inspection after configuring your backend URL.", "success");
+});
+el("clearBtn").addEventListener("click", clearAll);
+
+el("checkBtn").addEventListener("click", async () => {
+  const base = baseUrl();
+  if (!base) {
+    message("Enter your backend URL first.", "error");
+    return;
+  }
+  el("connection").textContent = "Checking backend…";
+  el("connection").className = "connection";
+  try {
+    const response = await fetch(base + "/health");
+    if (!response.ok) throw new Error("HTTP " + response.status);
+    const data = await response.json();
+    if (data.model_loaded === true) {
+      el("connection").textContent = "Model online";
+      el("connection").className = "connection online";
+      message("Backend responded and reports the model is loaded.", "success");
+    } else {
+      el("connection").textContent = "Model unavailable";
+      el("connection").className = "connection offline";
+      message("Backend is reachable but model weights are not loaded.", "error");
+    }
+  } catch (error) {
+    el("connection").textContent = "Connection failed";
+    el("connection").className = "connection offline";
+    message("Backend connection failed: " + error.message, "error");
+  }
+});
+
+el("runBtn").addEventListener("click", async () => {
+  if (!selectedFile || busy) return;
+  const base = baseUrl();
+  if (!base) {
+    message("Enter your deployed backend URL before running detection.", "error");
+    el("apiUrl").focus();
+    return;
+  }
+
+  busy = true;
+  el("runBtn").disabled = true;
+  el("runBtn").textContent = "Analyzing…";
+  el("inspectionStatus").textContent = "Running";
+  resetResults();
+  message("Sending image to the prediction API…");
+
+  try {
     const form = new FormData();
     form.append("file", selectedFile);
     const response = await fetch(base + "/predict", {
