@@ -1,0 +1,310 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1118" />
+  <title>SteelSight AI | Intelligent Inspection</title>
+  <style>
+    :root {
+      --bg: #0b1118;
+      --panel: #121c26;
+      --panel2: #172431;
+      --line: #293947;
+      --text: #edf4fa;
+      --muted: #8ea2b4;
+      --cyan: #5ce1e6;
+      --green: #7ee0b2;
+      --orange: #ffbd75;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button, input { font: inherit; }
+    .layout { min-height: 100vh; }
+    header {
+      height: 76px;
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+      background: #0e1620;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .logo {
+      width: 42px; height: 42px; border-radius: 12px;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg, #5ce1e6, #318eab);
+      color: #07121a; font-weight: 900; font-size: 21px;
+    }
+    .brand-name { font-size: 18px; font-weight: 750; letter-spacing: -.5px; }
+    .brand-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+    .status { color: var(--green); font-size: 12px; }
+    .status::before {
+      content: ""; display: inline-block; width: 7px; height: 7px;
+      border-radius: 50%; background: var(--green); margin-right: 8px;
+    }
+    main { max-width: 1240px; margin: auto; padding: 42px 24px 60px; }
+    .eyebrow {
+      color: var(--cyan); font-size: 11px; letter-spacing: 2px;
+      font-weight: 750; text-transform: uppercase;
+    }
+    h1 { font-size: clamp(32px, 5vw, 48px); letter-spacing: -1.8px; margin: 12px 0; }
+    .intro { color: var(--muted); line-height: 1.7; max-width: 680px; font-size: 15px; }
+    .metrics {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 14px; margin: 32px 0;
+    }
+    .metric, .panel {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+    .metric { padding: 20px; }
+    .metric-label { color: var(--muted); font-size: 12px; }
+    .metric-value { font-size: 25px; font-weight: 750; margin-top: 12px; }
+    .metric-note { color: var(--muted); font-size: 11px; margin-top: 7px; }
+    .content {
+      display: grid; grid-template-columns: 1.15fr .85fr; gap: 18px;
+    }
+    .panel { padding: 24px; min-width: 0; }
+    .panel-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 20px;
+    }
+    h2 { font-size: 17px; margin: 0; }
+    .tag {
+      font-size: 10px; color: var(--cyan); border: 1px solid #31515b;
+      padding: 6px 9px; border-radius: 20px; white-space: nowrap;
+    }
+    .drop {
+      border: 1px dashed #476173; background: #0e1822;
+      border-radius: 12px; padding: 25px 15px; text-align: center;
+    }
+    .upload-icon { font-size: 32px; margin-bottom: 12px; }
+    .drop strong { display: block; font-size: 14px; }
+    .drop p { color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .file-input { display: none; }
+    .btn {
+      display: inline-flex; justify-content: center; align-items: center;
+      border: 0; border-radius: 9px; padding: 12px 16px;
+      cursor: pointer; font-weight: 700; font-size: 12px;
+    }
+    .primary { background: var(--cyan); color: #07151b; }
+    .secondary { background: var(--panel2); color: var(--text); border: 1px solid var(--line); }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .actions .btn { flex: 1; }
+    .preview {
+      margin-top: 16px; border-radius: 10px; overflow: hidden;
+      background: #0b121a; border: 1px solid var(--line);
+      min-height: 120px; display: grid; place-items: center;
+    }
+    .preview img { width: 100%; max-height: 330px; object-fit: contain; display: block; }
+    .preview-empty { padding: 28px 10px; color: var(--muted); font-size: 12px; text-align: center; }
+    .notice {
+      padding: 12px; margin-top: 14px; border-radius: 9px;
+      color: var(--orange); background: #33271b; font-size: 12px; line-height: 1.6;
+    }
+    .feature-list { display: grid; gap: 12px; }
+    .feature {
+      display: flex; gap: 13px; align-items: flex-start;
+      padding: 15px; border-radius: 11px;
+      background: #0e1822; border: 1px solid #223340;
+    }
+    .feature-icon { font-size: 19px; }
+    .feature strong { display: block; font-size: 13px; margin-bottom: 5px; }
+    .feature p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .results { margin-top: 18px; }
+    .result-row {
+      display: flex; justify-content: space-between; gap: 12px;
+      padding: 13px 0; border-bottom: 1px solid var(--line); font-size: 12px;
+    }
+    .result-row span:last-child { color: var(--muted); text-align: right; }
+    footer {
+      border-top: 1px solid var(--line); color: var(--muted);
+      padding: 22px 5%; font-size: 11px; display: flex;
+      justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    }
+    @media (max-width: 800px) {
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .content { grid-template-columns: 1fr; }
+      main { padding: 30px 16px 42px; }
+      .panel { padding: 18px; }
+    }
+    @media (max-width: 420px) {
+      .status { font-size: 10px; }
+      .brand-name { font-size: 15px; }
+      .metric { padding: 14px; }
+      .metric-value { font-size: 21px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <header>
+      <div class="brand">
+        <div class="logo">S</div>
+        <div>
+          <div class="brand-name">SteelSight <span style="color:var(--cyan)">AI</span></div>
+          <div class="brand-sub">INTELLIGENT SURFACE INSPECTION</div>
+        </div>
+      </div>
+      <div class="status">Interface ready</div>
+    </header>
+
+    <main>
+      <div class="eyebrow">Industrial intelligence / 01</div>
+      <h1>See defects before<br />they become problems.</h1>
+      <p class="intro">
+        An AI-assisted steel surface inspection platform designed to help
+        identify surface anomalies, visualize potential defects, and support
+        more consistent quality-control decisions.
+      </p>
+
+      <section class="metrics">
+        <div class="metric">
+          <div class="metric-label">Detection engine</div>
+          <div class="metric-value">YOLOv8</div>
+          <div class="metric-note">Steel defect detection</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Defect categories</div>
+          <div class="metric-value">06</div>
+          <div class="metric-note">NEU-DET classes</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Validation mAP@50</div>
+          <div class="metric-value">73.3%</div>
+          <div class="metric-note">Reported project benchmark</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Inspection mode</div>
+          <div class="metric-value">Image</div>
+          <div class="metric-note">Preview available locally</div>
+        </div>
+      </section>
+
+      <section class="content">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Surface inspection</h2>
+            <span class="tag">IMAGE WORKSPACE</span>
+          </div>
+
+          <div class="drop">
+            <div class="upload-icon">▧</div>
+            <strong>Select a steel surface image</strong>
+            <p>Choose a JPG, PNG or WEBP image to preview it in the workspace.</p>
+            <label class="btn primary" for="imageInput">Choose image</label>
+            <input class="file-input" id="imageInput" type="file" accept="image/png,image/jpeg,image/webp" />
+          </div>
+
+          <div class="preview" id="preview">
+            <div class="preview-empty">Your selected image will appear here.</div>
+          </div>
+
+          <div class="actions">
+            <button class="btn secondary" id="clearBtn" type="button">Clear image</button>
+            <button class="btn primary" id="inspectBtn" type="button">Run AI inspection</button>
+          </div>
+
+          <div class="notice" id="message" role="status">
+            Demo interface only: AI inference is not connected yet. Uploading an image does not run the model.
+          </div>
+          <div class="results">
+            <div class="result-row"><span>Image status</span><span id="imageStatus">No image selected</span></div>
+            <div class="result-row"><span>AI prediction</span><span id="predictionStatus">Not run</span></div>
+            <div class="result-row"><span>Backend connection</span><span>Not connected</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Inspection capabilities</h2>
+            <span class="tag">PLATFORM OVERVIEW</span>
+          </div>
+          <div class="feature-list">
+            <div class="feature">
+              <div class="feature-icon">⌕</div>
+              <div><strong>Surface defect detection</strong><p>Designed around six NEU-DET categories: crazing, inclusion, patches, pitted surface, rolled-in scale and scratches.</p></div>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">◉</div>
+              <div><strong>Visual inspection results</strong><p>The planned inference workflow will display detected regions, predicted classes and model confidence scores.</p></div>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">▤</div>
+              <div><strong>Quality-control workflow</strong><p>Designed to support review and inspection decisions. Production use requires validation on representative industrial data.</p></div>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">⌁</div>
+              <div><strong>Model transparency</strong><p>Reported benchmark figures are not a guarantee of accuracy on live production steel or different camera conditions.</p></div>
+            </div>
+          </div>
+          <div class="results">
+            <div class="result-row"><span>Model family</span><span>YOLOv8 Nano</span></div>
+            <div class="result-row"><span>Training dataset</span><span>NEU-DET</span></div>
+            <div class="result-row"><span>Reported mAP@50–95</span><span>39.8%</span></div>
+            <div class="result-row"><span>Next integration step</span><span>Connect Python API</span></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>SteelSight AI · Intelligent surface inspection</span>
+      <span>Prototype interface · Not a certified industrial inspection system</span>
+    </footer>
+  </div>
+
+  <script>
+    const input = document.getElementById("imageInput");
+    const preview = document.getElementById("preview");
+    const message = document.getElementById("message");
+    const imageStatus = document.getElementById("imageStatus");
+    const predictionStatus = document.getElementById("predictionStatus");
+    let imageUrl = null;
+
+    input.addEventListener("change", () => {
+      const file = input.files && input.files[0];
+      if (!file) return;
+
+      if (imageUrl) URL.revokeObjectURL(imageUrl);
+      imageUrl = URL.createObjectURL(file);
+
+      const img = document.createElement("img");
+      img.src = imageUrl;
+      img.alt = "Selected steel surface preview";
+      preview.replaceChildren(img);
+
+      imageStatus.textContent = file.name;
+      predictionStatus.textContent = "Not run";
+      message.textContent = "Image loaded for preview. The AI model is not connected yet.";
+    });
+
+    document.getElementById("clearBtn").addEventListener("click", () => {
+      input.value = "";
+      if (imageUrl) URL.revokeObjectURL(imageUrl);
+      imageUrl = null;
+      preview.innerHTML = '<div class="preview-empty">Your selected image will appear here.</div>';
+      imageStatus.textContent = "No image selected";
+      predictionStatus.textContent = "Not run";
+      message.textContent = "Demo interface only: AI inference is not connected yet.";
+    });
+
+    document.getElementById("inspectBtn").addEventListener("click", () => {
+      if (!input.files || !input.files[0]) {
+        message.textContent = "Please choose a steel surface image first.";
+        return;
+      }
+      predictionStatus.textContent = "Backend required";
+      message.textContent = "The image preview works, but real predictions require connecting the FastAPI backend and trained model.";
+    });
+  </script>
+</body>
+</html>
