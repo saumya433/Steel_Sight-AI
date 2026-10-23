@@ -356,9 +356,11 @@ let selectedFile = null;
 let previewUrl = null;
 let busy = false;
 
+
 function baseUrl() {
-  return el("apiUrl").value.trim().replace(/\/+$/, "");
+  return "https://steel-sight-ai.onrender.com";
 }
+
 function message(text, type="") {
   el("message").textContent = text;
   el("message").className = "message" + (type ? " " + type : "");
