@@ -1,0 +1,13 @@
+ultralytics>=8.3
+torch>=2.2
+torchvision>=0.17
+opencv-python-headless>=4.8
+numpy>=1.26
+pandas>=2.0
+plotly>=5.20
+streamlit>=1.45
+pyyaml>=6.0
+pytest>=8.0
+onnx>=1.15
+onnxruntime>=1.17
+onnxslim>=0.1

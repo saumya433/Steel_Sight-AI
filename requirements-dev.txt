@@ -1,0 +1,5 @@
+-r requirements.txt
+# extra packages used only by the tests / optional features
+scikit-image>=0.22   # real-face test image (skimage.data.astronaut)
+gradio>=5.0          # scripts/gradio_demo.py and its tests
+# transformers>=4.40 # optional: CLIP "is it steel?" scene check (downloads ~600 MB on first use)

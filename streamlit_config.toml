@@ -1,0 +1,10 @@
+# Copy to .streamlit/config.toml (optional). Keeps the demo clean on a shared screen.
+[server]
+headless = true
+maxUploadSize = 20
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+primaryColor = "#2a78d6"

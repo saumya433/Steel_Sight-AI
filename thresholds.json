@@ -1,0 +1,23 @@
+{
+  "_note": "Starting values read off the v1 F1/precision curves. Regenerate from your own validation run with: python scripts/evaluate.py --weights models/best_v1.pt",
+  "review_min": 0.25,
+  "auto_flag": 0.60,
+  "per_class_review": {
+    "crazing": 0.18,
+    "inclusion": 0.30,
+    "patches": 0.40,
+    "pitted_surface": 0.30,
+    "rolled-in_scale": 0.30,
+    "scratches": 0.45
+  },
+  "per_class_auto": {
+    "crazing": 0.55,
+    "inclusion": 0.65,
+    "patches": 0.70,
+    "pitted_surface": 0.65,
+    "rolled-in_scale": 0.65,
+    "scratches": 0.70
+  },
+  "anomaly_threshold": null,
+  "min_box_frac": 0.0
+}
